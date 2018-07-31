@@ -26,57 +26,57 @@ import java.util.stream.Collector;
  *
  * @param <T> Le type des éléments
  */
-public class GroupeurDeSimilaires<T> implements Collector<T, Map<Cle<T>, List<T>>, StockeurDeSimilaires<T>> {
+public class CollectorBySimilarity<T> implements Collector<T, Map<Key<T>, List<T>>, SimilarityStorage<T>> {
 	/**
 	 * Fonction de hashage d'un élément
 	 */
-	private ToIntFunction<T> fonctionHash;
+	private ToIntFunction<T> hashFunction;
 	
 	/**
 	 * Fonction déterminant si deux éléments sont identiques
 	 */
-	private BiPredicate<T, T> fonctionEgalite;
+	private BiPredicate<T, T> equalsFunction;
 
 	/**
 	 * Construit un collecteur qui regroupe les éléments en fonction
-	 * @param fonctionHash Fonction de hashage des éléments
-	 * @param fonctionEgalite Fonction de similarité des éléments
+	 * @param hashFunction Fonction de hashage des éléments
+	 * @param equalsFunction Fonction de similarité des éléments
 	 */
-	public GroupeurDeSimilaires(ToIntFunction<T> fonctionHash, BiPredicate<T, T> fonctionEgalite) {
-		this.fonctionHash = fonctionHash;
-		this.fonctionEgalite = fonctionEgalite;
+	public CollectorBySimilarity(ToIntFunction<T> hashFunction, BiPredicate<T, T> equalsFunction) {
+		this.hashFunction = hashFunction;
+		this.equalsFunction = equalsFunction;
 	}
 
 	@Override
-	public Supplier<Map<Cle<T>, List<T>>> supplier() {
-		return () -> new HashMap<Cle<T>, List<T>>();
+	public Supplier<Map<Key<T>, List<T>>> supplier() {
+		return () -> new HashMap<Key<T>, List<T>>();
 	}
 	
 	@Override
-	public BiConsumer<Map<Cle<T>, List<T>>, T> accumulator() {
+	public BiConsumer<Map<Key<T>, List<T>>, T> accumulator() {
 		return (carte, element) -> {
-			Cle<T> nouvelleCle = new Cle<T>(element, fonctionHash, fonctionEgalite);
+			Key<T> newKey = new Key<T>(element, hashFunction, equalsFunction);
 			
-			List<T> liste = carte.get(nouvelleCle);
+			List<T> liste = carte.get(newKey);
 			
 			if (liste != null) {
 				liste.add(element);
 			} else {
 				liste = new ArrayList<>();
 				liste.add(element);
-				carte.put(nouvelleCle, liste);
+				carte.put(newKey, liste);
 			}
 		};
 	}
 
 
 	@Override
-	public BinaryOperator<Map<Cle<T>, List<T>>> combiner() {
+	public BinaryOperator<Map<Key<T>, List<T>>> combiner() {
 		return (mapDestination, mapSource) -> {
 			
 			mapSource.entrySet().forEach(
 					entree -> {
-						Cle<T> cle = entree.getKey();
+						Key<T> cle = entree.getKey();
 						List<T> valeur = entree.getValue();
 						
 						List<T> destination = mapDestination.get(cle);
@@ -92,8 +92,8 @@ public class GroupeurDeSimilaires<T> implements Collector<T, Map<Cle<T>, List<T>
 	}
 
 	@Override
-	public Function<Map<Cle<T>, List<T>>, StockeurDeSimilaires<T>> finisher() {
-		return carte -> new StockeurDeSimilaires<>(fonctionHash, fonctionEgalite, carte);
+	public Function<Map<Key<T>, List<T>>, SimilarityStorage<T>> finisher() {
+		return carte -> new SimilarityStorage<>(hashFunction, equalsFunction, carte);
 	}
 
 	@Override

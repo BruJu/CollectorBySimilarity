@@ -29,8 +29,6 @@ public class Exemple {
 	}
 	
 	public static void main(String[] args) {
-
-		
 		Personne[] personnes = {
 			new Personne("Ying", "Paul"),
 			new Personne("Yang", "Jacques"),
@@ -45,16 +43,16 @@ public class Exemple {
 		
 		List<Personne> liste = Arrays.asList(personnes);
 		
-		GroupeurDeSimilaires<Personne> mapReducer =
-				new GroupeurDeSimilaires<Personne>(Personne::mauvaisHash, Personne::memeNom);
+		CollectorBySimilarity<Personne> collectNom =
+				new CollectorBySimilarity<Personne>(Personne::mauvaisHash, Personne::memeNom);
 		
-		StockeurDeSimilaires<Personne> carte = liste.stream().collect(mapReducer);
+		SimilarityStorage<Personne> carte = liste.stream().collect(collectNom);
 
 		System.out.println("Groupements identifiés : ");
 		carte.getMap().forEach((cle, personnesDeLaMemeFamille) -> System.out.println(personnesDeLaMemeFamille));
 		System.out.println();
 		System.out.println("Similaires à Yang Johan : ");
-		System.out.println(carte.getSimilaires(new Personne("Yang", "Johan")));
+		System.out.println(carte.getSimilarsTo(new Personne("Yang", "Johan")));
 
 	}
 

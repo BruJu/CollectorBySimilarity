@@ -12,41 +12,41 @@ import java.util.function.ToIntFunction;
  *
  * @param <T> Le type des éléments stockés
  */
-public class StockeurDeSimilaires<T> {
+public class SimilarityStorage<T> {
 	/**
 	 * Fonction de hashage d'un élément
 	 */
-	private ToIntFunction<T> fonctionHash;
+	private ToIntFunction<T> hashFunction;
 	
 	/**
 	 * Fonction déterminant si deux éléments sont identiques
 	 */
-	private BiPredicate<T, T> fonctionEgalite;
+	private BiPredicate<T, T> equalityFunction;
 	
 	/**
 	 * Carte associant clés et éléments similaires
 	 */
-	private Map<Cle<T>, List<T>> carteSimilaires;
+	private Map<Key<T>, List<T>> similaritiesMap;
 
 	/**
 	 * Construit un stockage d'éléments similaires
-	 * @param fonctionHash La fonction de hash utilisée
-	 * @param fonctionEgalite La fonction d'égalité utilisée
-	 * @param carteSimilaires La carte des éléments similaires construite
+	 * @param hashFunction La fonction de hash utilisée
+	 * @param equalityFunction La fonction d'égalité utilisée
+	 * @param similiaritiesMap La carte des éléments similaires construite
 	 */
-	public StockeurDeSimilaires(ToIntFunction<T> fonctionHash, BiPredicate<T, T> fonctionEgalite,
-			Map<Cle<T>, List<T>> carteSimilaires) {
-		this.fonctionHash = fonctionHash;
-		this.fonctionEgalite = fonctionEgalite;
-		this.carteSimilaires = carteSimilaires;
+	public SimilarityStorage(ToIntFunction<T> hashFunction, BiPredicate<T, T> equalityFunction,
+			Map<Key<T>, List<T>> similiaritiesMap) {
+		this.hashFunction = hashFunction;
+		this.equalityFunction = equalityFunction;
+		this.similaritiesMap = similiaritiesMap;
 	}
 
 	/**
 	 * Renvoie la carte construite des éléments similaires
 	 * @return Une carte non mutable avec les clés associés aux éléments similaires
 	 */
-	public Map<Cle<T>, List<T>> getMap() {
-		return carteSimilaires;
+	public Map<Key<T>, List<T>> getMap() {
+		return similaritiesMap;
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class StockeurDeSimilaires<T> {
 	 * @param element L'élément dont on souhaite avoir la liste des éléments similaires
 	 * @return Une liste non mutable d'éléments similaires à l'élément donné 
 	 */
-	public List<T> getSimilaires(T element) {
-		return carteSimilaires.get(new Cle<>(element, fonctionHash, fonctionEgalite));
+	public List<T> getSimilarsTo(T element) {
+		return similaritiesMap.get(new Key<>(element, hashFunction, equalityFunction));
 	}
 }

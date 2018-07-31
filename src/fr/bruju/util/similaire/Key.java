@@ -1,4 +1,5 @@
 package fr.bruju.util.similaire;
+
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
@@ -9,7 +10,7 @@ import java.util.function.ToIntFunction;
  *
  * @param <T> Le type des éléments
  */
-public class Cle<T> {
+public class Key<T> {
 	/**
 	 * Element dont on constitue la clé
 	 */
@@ -17,38 +18,38 @@ public class Cle<T> {
 	/**
 	 * Fonction permettant de déterminer le hash
 	 */
-	private ToIntFunction<T> fonctionHash;
+	private ToIntFunction<T> hashFunction;
 	/**
 	 * Fonction permettant de déterminer si deux clés sont identiques
 	 */
-	private BiPredicate<T, T> fonctionEgalite;
+	private BiPredicate<T, T> equalsFunction;
 
 	/**
 	 * Construit une clé pour l'élément donné
 	 * 
 	 * @param element L'élément donné
-	 * @param fonctionHash La fonction déterminant le hashcode de la clé
-	 * @param fonctionEgalite La fonction déterminant si deux clés sont identiques
+	 * @param hashFunction La fonction déterminant le hashcode de la clé
+	 * @param equalsFunction La fonction déterminant si deux clés sont identiques
 	 */
-	public Cle(T element, ToIntFunction<T> fonctionHash, BiPredicate<T, T> fonctionEgalite) {
+	public Key(T element, ToIntFunction<T> hashFunction, BiPredicate<T, T> equalsFunction) {
 		this.element = element;
-		this.fonctionHash = fonctionHash;
-		this.fonctionEgalite = fonctionEgalite;
+		this.hashFunction = hashFunction;
+		this.equalsFunction = equalsFunction;
 	}
 
 	@Override
 	public int hashCode() {
-		return fonctionHash.applyAsInt(this.element);
+		return hashFunction.applyAsInt(this.element);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Cle)) {
+		if (!(obj instanceof Key)) {
 			return false;
 		}
-		@SuppressWarnings("unchecked")
-		Cle<T> cle = (Cle<T>) obj;
+		Key<T> cle = (Key<T>) obj;
 
-		return fonctionEgalite.test(this.element, cle.element);
+		return equalsFunction.test(this.element, cle.element);
 	}
 }
