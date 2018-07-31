@@ -27,7 +27,7 @@ Elle se repose sur :
 		
 		List<Personne> liste = Arrays.asList(personnes);
 		
-		CollectorSimilar<Personne> collectNom =
+		CollectorBySimilarity<Personne> collectNom =
 				new CollectorBySimilarity<Personne>(Personne::mauvaisHash, Personne::memeNom);
 		
 		SimilarityStorage<Personne> carte = liste.stream().collect(collectNom);
