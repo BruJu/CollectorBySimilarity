@@ -13,31 +13,30 @@ Elle se repose sur :
 ## Exemple
 
 ```
-		Personne[] personnes = {
-			new Personne("Ying", "Paul"),
-			new Personne("Yang", "Jacques"),
-			new Personne("Zoo", "Alonzo"),
-			new Personne("Paul", "Allan"),
-			new Personne("Schwarzaieneruozregger", "Arnold"),
-			new Personne("Ying", "Akira"),
-			new Personne("Yang", "Jean-Claude"),
-			new Personne("Ying", "Frederic"),
-			new Personne("Ying", "Mohamed")
-		};
-		
-		List<Personne> liste = Arrays.asList(personnes);
-		
-		CollectorBySimilarity<Personne> collectNom =
-				new CollectorBySimilarity<Personne>(Personne::mauvaisHash, Personne::memeNom);
-		
-		SimilarityStorage<Personne> carte = liste.stream().collect(collectNom);
+Personne[] personnes = {
+	new Personne("Ying", "Paul"),
+	new Personne("Yang", "Jacques"),
+	new Personne("Zoo", "Alonzo"),
+	new Personne("Paul", "Allan"),
+	new Personne("Schwarzaieneruozregger", "Arnold"),
+	new Personne("Ying", "Akira"),
+	new Personne("Yang", "Jean-Claude"),
+	new Personne("Ying", "Frederic"),
+	new Personne("Ying", "Mohamed")
+};
 
-		System.out.println("Groupements identifiés : ");
-		carte.getMap().forEach((cle, personnesDeLaMemeFamille) -> System.out.println(personnesDeLaMemeFamille));
-		System.out.println();
-		System.out.println("Similaires à Yang Johan : ");
-		System.out.println(carte.getSimilarsTo(new Personne("Yang", "Johan")));
+List<Personne> liste = Arrays.asList(personnes);
 
+CollectorBySimilarity<Personne> collectNom =
+		new CollectorBySimilarity<Personne>(Personne::mauvaisHash, Personne::memeNom);
+
+SimilarityStorage<Personne> carte = liste.stream().collect(collectNom);
+
+System.out.println("Groupements identifiés : ");
+carte.getMap().forEach((cle, personnesDeLaMemeFamille) -> System.out.println(personnesDeLaMemeFamille));
+System.out.println();
+System.out.println("Similaires à Yang Johan : ");
+System.out.println(carte.getSimilarsTo(new Personne("Yang", "Johan")));
 ```
 
 Renvoie
