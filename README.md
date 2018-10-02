@@ -57,5 +57,5 @@ Le code complet de cet exemple peut être trouvé dans le fichier Exemple.java
 
 ## Licence
 
-Cette bibliothèque est distribuée sous licence [https://creativecommons.org/publicdomain/zero/1.0/deed.fr](Creative Commons Zero).
+Cette bibliothèque est distribuée sous licence [Creative Commons Zero](https://creativecommons.org/publicdomain/zero/1.0/deed.fr).
 
